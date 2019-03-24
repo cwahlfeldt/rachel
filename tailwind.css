@@ -34574,3 +34574,11 @@ video {
     z-index: auto;
   }
 }
+
+.cover {
+  object-fit: cover,
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}

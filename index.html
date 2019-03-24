@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title></title>
   <link rel="stylesheet" href="tailwind.css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro" rel="stylesheet"> 
   <style>
     body {
       color: #222;
@@ -11,24 +12,44 @@
     .container {
       padding: 20px;
       width: 100%;
-      max-width: 900px;
+      max-width: 700px;
       height: 100vh;
+    }
+    p {
+      margin: 10px 0;
+      font-family: 'Source Serif Pro', serif !important;
+      line-height: 1.7;
+    }
+    p:last-child {
+      margin-bottom: 0;
+    }
+    .text-purple {
+      color: violet;
+    }
+    .cover {
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .flex-wrap {
+      flex-wrap: wrap;
     }
   </style>
 </head>
 <body>
 
-  <main class="w-screen h-screen bg-grey-light">
+  <main class="bg-grey-light">
     <div class="container mx-auto">
-      <div class="flex flex-col justify-center items-center w-full h-full">
+      <div class="flex flex-col items-center w-full h-full">
         <p class="font-serif font-thin leading-normal">
-          Wi neque et veniam Harum sequi molestias quae saepe excepturi Architecto nemo voluptate libero voluptates magnam, veniam Assumenda exercitationem officia alias sit tempore qui Eius fugiat velit blanditiis
-          Ipsum corrupti sequi neque et veniam Harum sequi molestias quae saepe excepturi Architecto nemo voluptate libero voluptates magnam, veniam Assumenda exercitationem officia alias sit tempore qui Eius fugiat velit blanditiis
-          Ipsum corrupti sequi neque et veniam Harum sequi molestias quae saepe excepturi Architecto nemo voluptate libero voluptates magnam, veniam Assumenda exercitationem officia alias sit tempore qui Eius fugiat velit blanditiis
-          Ipsum corrupti sequi neque et veniam Harum sequi molestias quae saepe excepturi Architecto nemo voluptate libero voluptates magnam, veniam Assumenda exercitationem officia alias sit tempore qui Eius fugiat velit blanditiis
-          Ipsum corrupti sequi neque et veniam Harum sequi molestias quae saepe excepturi Architecto nemo voluptate libero voluptates magnam, veniam Assumenda exercitationem officia alias sit tempore qui Eius fugiat velit blanditiis
-          Ipsum corrupti sequi neque et veniam Harum sequi molestias quae saepe excepturi Architecto nemo voluptate libero voluptates magnam, veniam Assumenda exercitationem officia alias sit tempore qui Eius fugiat velit blanditiis
-          Ipsum corrupti sequi neque et veniam Harum sequi molestias quae saepe excepturi Architecto nemo voluptate libero voluptates magnam, veniam Assumenda exercitationem officia alias sit tempore qui Eius fugiat velit blanditiis
+          Happy birthday to my beautiful wife and future mother to our child! You are the best human being I know and I love you sooo much!
+        </p>
+        <br>
+        <p class="font-serif font-thin leading-normal">
+          This has been a stressful few weeks with work and all but I want you to know that I'm very proud of you for working so hard for our family. Franklin appreciates it and so do I! Each year I'm with you I grow to love you more and more and appreciate who you truly are which is, a caring, loving, thoughtful, sexy, amazing woman. I mean this, and I say it to you hundreds of times a day but, I love you. I love you to the moon and back. I will love you forever and will protect and provide for this family, and you until I'm in the ground :)
+        </p>
+        <p class="font-serif font-thin leading-normal">
+          I know we are on a tight budg but I want you to able to get yourself and our baby whatever you would like for your birthday. I pulled in some suggestions from etsy thatg I thought were cute for you and the baby.
         </p>
         <div id="etsy-list"></div>
       </div>
@@ -53,13 +74,11 @@
         setData: data => state => ({data}),
         getData: () => async (state, actions) => {
           const favoriteIds = await fetch(users(`/favorites/listings`)).then(data => data.json()).catch(err => err.message)
-          //console.log(favoriteIds)
           const data = await Promise.all(
             favoriteIds.results.map(async id => {
               return await fetch(listings(`/${id.listing_id}/images`)).then(data => data.json()).catch(err => err.message)
             })
           )
-          console.log(data)
           actions.setData(data)
         },
       }
@@ -70,26 +89,27 @@
           [
             !(state.data) &&
             h(
-              `div`,
-              {},
-              `I love you so much!`
+              `p`,
+              {class: `font-sans text-center my-5 text-purple`},
+              `I love (load...) you so much!`
             ),
             (state.data !== null) &&
             h(
               `section`,
-              {class: `my-12 flex flex-row items-center justify-center`},
-              (state.data) && state.data.map(item =>
+              {class: `my-12 flex flex-row flex-wrap items-center justify-between`},
+              (state.data) && state.data.map((item, i) =>
+                (item.params) &&
                 h(
                   `a`,
                   {
-                    class: `w-1/5 p-3`,
+                    class: `w-1/2 py-2 ${i !== 0 && i !== state.data.length ? `px-2` : ``}`,
                     href: `https://www.etsy.com/listing/${item.params.listing_id}`,
                   },
                   h(
                     `img`,
                     {
                       src: item.results[0].url_fullxfull,
-                      class: `etsy-imageh-auto`,
+                      class: `etsy-image cover w-full h-64`,
                     }
                   )
                 )
